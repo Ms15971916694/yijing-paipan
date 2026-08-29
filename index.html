@@ -96,12 +96,19 @@ function calc(){
   
   document.getElementById('res').className='on'}
 </script>
+<!-- ===== 错误捕获 + 按钮增强绑定（双保险，兼容 iOS）===== -->
 <script>
-if('serviceWorker' in navigator){
-  window.addEventListener('load',function(){
-    navigator.serviceWorker.register('sw.js?v=2').catch(function(e){console.log('SW注册失败',e)});
+window.addEventListener('DOMContentLoaded', function(){
+  var st = document.getElementById('status');
+  window.addEventListener('error', function(e){
+    if(st){ st.style.display='block'; st.textContent = '[JS错误] ' + (e.message||'unknown') + ' @' + (e.filename||''); }
   });
-}
+  if(typeof calc === 'function'){ if(st){ st.textContent='[启动] calc 已就绪 ✓'; } }
+  else if(st){ st.style.display='block'; st.textContent='[启动] ⚠️ calc 未定义！脚本可能加载失败'; }
+  var btn = document.querySelector('.btn');
+  if(btn){ btn.addEventListener('click', function(ev){ ev.preventDefault(); try{ calc(); }catch(err){ if(st){ st.style.display='block'; st.textContent='[点击异常] '+err.message; } } }); }
+});
 </script>
+<div id="status" style="position:fixed;bottom:0;left:0;right:0;background:#000;color:#0f0;font:11px monospace;padding:6px;z-index:9999;display:none;white-space:pre-wrap"></div>
 </body>
 </html>
