@@ -95,7 +95,13 @@ function calc(){
   rebuildSel('cy',cur);rebuildSel('b1',h1);rebuildSel('b2',h2);rebuildSel('b3',h3);
   
   document.getElementById('res').className='on'}
-if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(e){console.log('SW注册失败',e)})})}
-</script></script>
+</script>
+<script>
+if('serviceWorker' in navigator){
+  window.addEventListener('load',function(){
+    navigator.serviceWorker.register('sw.js').catch(function(e){console.log('SW注册失败',e)});
+  });
+}
+</script>
 </body>
 </html>
