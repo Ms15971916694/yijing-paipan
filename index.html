@@ -54,10 +54,10 @@ h1{text-align:center;font-size:20px;color:#d4a017;letter-spacing:6px;font-weight
 <div class="fld"><label>日</label><input id="iD" value="19" type="number" /></div>
 </div>
 <div class="gbox">
-<div class="gb m" id="gm" onclick="sg('m')">☰ 男</div>
-<div class="gb" id="gf" onclick="sg('f')">☷ 女</div>
+<div class="gb m" id="gm">☰ 男</div>
+<div class="gb" id="gf">☷ 女</div>
 </div>
-<button class="btn" onclick="calc()">开始排盘</button>
+<button class="btn" id="btnCalc">开始排盘</button>
 <div id="res">
 <div class="cy"><div class="bc" id="cy"><select class="paipanSel"><option>子</option><option>丑</option><option>寅</option><option>卯</option><option>辰</option><option>巳</option><option selected>午</option><option>未</option><option>申</option><option>酉</option><option>戌</option><option>亥</option></select></div></div>
 <table class="otable">
@@ -96,7 +96,7 @@ function calc(){
   
   document.getElementById('res').className='on'}
 </script>
-<!-- ===== 错误捕获 + 按钮增强绑定（双保险，兼容 iOS）===== -->
+<!-- ===== 错误捕获 + 全部按钮 addEventListener 绑定（彻底不用 inline onclick，兼容 iOS）===== -->
 <script>
 window.addEventListener('DOMContentLoaded', function(){
   var st = document.getElementById('status');
@@ -105,8 +105,15 @@ window.addEventListener('DOMContentLoaded', function(){
   });
   if(typeof calc === 'function'){ if(st){ st.textContent='[启动] calc 已就绪 ✓'; } }
   else if(st){ st.style.display='block'; st.textContent='[启动] ⚠️ calc 未定义！脚本可能加载失败'; }
-  var btn = document.querySelector('.btn');
+
+  // 全部用 addEventListener 绑定，兼容 iPhone Safari（inline onclick 在 iOS 可能失效）
+  var gm = document.getElementById('gm');
+  var gf = document.getElementById('gf');
+  var btn = document.getElementById('btnCalc');
+  if(gm){ gm.addEventListener('click', function(ev){ ev.preventDefault(); sg('m'); }); }
+  if(gf){ gf.addEventListener('click', function(ev){ ev.preventDefault(); sg('f'); }); }
   if(btn){ btn.addEventListener('click', function(ev){ ev.preventDefault(); try{ calc(); }catch(err){ if(st){ st.style.display='block'; st.textContent='[点击异常] '+err.message; } } }); }
+  if(st){ st.textContent = '[启动] 绑定完成 ✓'; }
 });
 </script>
 <div id="status" style="position:fixed;bottom:0;left:0;right:0;background:#000;color:#0f0;font:11px monospace;padding:6px;z-index:9999;display:none;white-space:pre-wrap"></div>
