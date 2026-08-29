@@ -99,7 +99,7 @@ function calc(){
 <script>
 if('serviceWorker' in navigator){
   window.addEventListener('load',function(){
-    navigator.serviceWorker.register('sw.js').catch(function(e){console.log('SW注册失败',e)});
+    navigator.serviceWorker.register('sw.js?v=2').catch(function(e){console.log('SW注册失败',e)});
   });
 }
 </script>
