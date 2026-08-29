@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>易经排盘</title>
+<!-- ===== PWA / iOS 主屏幕支持 ===== -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="易经排盘">
+<meta name="theme-color" content="#0c0c1a">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="icon-192.png">
+<style>
+body{font-family:'PingFang SC','Microsoft YaHei','Noto Serif SC',serif;background:#0c0c1a;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;margin:0}
+.box{background:linear-gradient(180deg,#1a1a2e 0%,#12121f 100%);border:1px solid rgba(255,255,255,0.08);border-radius:24px;padding:28px 20px 24px;max-width:380px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,0.6)}
+h1{text-align:center;font-size:20px;color:#d4a017;letter-spacing:6px;font-weight:700;margin:0 0 4px}
+.sub{text-align:center;font-size:11px;color:rgba(255,255,255,0.25);margin:0 0 22px;letter-spacing:2px}
+.row{display:flex;gap:8px;margin-bottom:14px}.row .fld{flex:1;text-align:center}
+.row .fld label{display:block;font-size:11px;color:rgba(255,255,255,0.4);margin-bottom:3px}
+.row .fld input{width:100%;padding:8px;text-align:center;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:7px;font-size:15px;color:#fff;outline:none;box-sizing:border-box}
+.row .fld input:focus{border-color:#d4a017}
+.gbox{display:flex;gap:10px;margin-bottom:18px;justify-content:center}
+.gb{flex:1;max-width:130px;padding:8px;text-align:center;border:1px solid rgba(255,255,255,0.12);border-radius:9px;background:rgba(255,255,255,0.04);color:rgba(255,255,255,0.4);font-size:14px;cursor:pointer;letter-spacing:3px}
+.gb.m{color:#60a5fa;border-color:#60a5fa;background:rgba(96,165,250,0.1)}
+.gb.f{color:#f472b6;border-color:#f472b6;background:rgba(244,114,182,0.1)}
+.btn{width:100%;padding:12px;background:linear-gradient(135deg,#d4a017,#b8860b);border:none;border-radius:10px;font-size:16px;font-weight:700;color:#0c0c1a;cursor:pointer;letter-spacing:5px;margin-bottom:22px}
+.btn:hover{box-shadow:0 4px 15px rgba(212,160,23,0.3)}
+#res{display:none}#res.on{display:block;animation:fi .4s ease}
+@keyframes fi{from{opacity:0}to{opacity:1}}
+.cy{text-align:center;margin:0 0 12px}
+.cy .bc{font-size:34px;color:#d4a017;font-weight:700;text-shadow:0 0 20px rgba(212,160,23,0.2);margin-bottom:12px}
+
+.otable{width:100%;border-collapse:collapse}
+.otable td{padding:4px;text-align:center;vertical-align:middle}
+
+.cell{padding:10px 6px;border:1px solid rgba(255,255,255,0.08);border-radius:8px;background:rgba(255,255,255,0.03)}.cy select{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:7px;color:#d4a017;font-size:28px;font-weight:700;text-align:center;padding:4px;outline:none;cursor:pointer;width:80px}.cy select:focus{border-color:#d4a017}.cell select{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.15);border-radius:5px;color:#fff;font-size:24px;font-weight:700;text-align:center;padding:3px;outline:none;cursor:pointer;width:65px}.cell select option{background:#1a1a2e;color:#fff}
+.cy select{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:7px;color:#d4a017;font-size:28px;font-weight:700;text-align:center;padding:4px;outline:none;cursor:pointer;width:80px}.cy select:focus{border-color:#d4a017}.cell select{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.15);border-radius:5px;color:#fff;font-size:24px;font-weight:700;text-align:center;padding:3px;outline:none;cursor:pointer;width:65px}.cell select option{background:#1a1a2e;color:#fff}
+.cell .cc{font-size:26px;color:#fff;font-weight:700}
+.cell .ss{font-size:9px;color:rgba(255,255,255,0.35);margin-top:2px}
+.cell .cc.g{color:#d4a017}
+.ftr{text-align:center;font-size:10px;color:rgba(255,255,255,0.1);margin-top:16px;letter-spacing:2px}
+.tt{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(0,0,0,0.85);color:#fff;padding:12px 24px;border-radius:8px;font-size:14px;z-index:999;display:none}
+</style>
+</head>
+<body>
+<div class="box">
+<h1>☰ 易经排盘</h1><p class="sub">输入出生信息 · 自动推算命局</p>
+<div class="row">
+<div class="fld"><label>出生年</label><input id="iY" value="1994" type="number" /></div>
+<div class="fld"><label>月</label><input id="iM" value="6" type="number" /></div>
+<div class="fld"><label>日</label><input id="iD" value="19" type="number" /></div>
+</div>
+<div class="gbox">
+<div class="gb m" id="gm" onclick="sg('m')">☰ 男</div>
+<div class="gb" id="gf" onclick="sg('f')">☷ 女</div>
+</div>
+<button class="btn" onclick="calc()">开始排盘</button>
+<div id="res">
+<div class="cy"><div class="bc" id="cy"><select class="paipanSel"><option>子</option><option>丑</option><option>寅</option><option>卯</option><option>辰</option><option>巳</option><option selected>午</option><option>未</option><option>申</option><option>酉</option><option>戌</option><option>亥</option></select></div></div>
+<table class="otable">
+<tr>
+<td><div class="cell"><div class="cc g" id="a1">戌</div></div></td>
+<td><div class="cell"><div class="cc g" id="a2">卯</div></div></td>
+<td><div class="cell"><div class="cc g" id="a3">酉</div></div></td></tr>
+<tr>
+<td><div class="cell"><div class="cc" id="b1"><select class="paipanSel"><option>子</option><option>丑</option><option>寅</option><option>卯</option><option>辰</option><option selected>巳</option><option>午</option><option>未</option><option>申</option><option>酉</option><option>戌</option><option>亥</option></select></div></div></td>
+<td><div class="cell"><div class="cc" id="b2"><select class="paipanSel"><option>子</option><option>丑</option><option>寅</option><option>卯</option><option>辰</option><option>巳</option><option>午</option><option selected>未</option><option>申</option><option>酉</option><option>戌</option><option>亥</option></select></div></div></td>
+<td><div class="cell"><div class="cc" id="b3"><select class="paipanSel"><option>子</option><option>丑</option><option>寅</option><option>卯</option><option>辰</option><option>巳</option><option>午</option><option selected>未</option><option>申</option><option>酉</option><option>戌</option><option>亥</option></select></div></div></td></tr>
+</table></div>
+<p class="ftr">玄武 · 易经排盘</p></div>
+<div class="tt" id="tt"></div>
+<script>
+var dz=['子','丑','寅','卯','辰','巳','午','未','申','酉','戌','亥'];
+var g='m';
+function sg(v){g=v;document.getElementById('gm').className='gb'+(v=='m'?' m':'');document.getElementById('gf').className='gb'+(v=='f'?' f':'')}
+function yz(y){return dz[(y-4)%12]}
+function fw(s,n){return dz[(dz.indexOf(s)+n-1)%12]}
+function bw(s,n){return dz[((dz.indexOf(s)-n+1)%12+12)%12]}
+function tm(t){var e=document.getElementById('tt');e.textContent=t;e.style.display='block';setTimeout(function(){e.style.display='none'},2000)}
+var lunar2026=[[1,2,17],[2,3,19],[3,4,17],[4,5,17],[5,6,15],[6,7,14],[7,8,13],[8,9,11],[9,10,11],[10,11,9],[11,12,9],[12,1,8]];
+function gl(){var n=new Date(),nt=n.getTime(),b={m:1,d:1};for(var i=0;i<lunar2026.length;i++){var r=lunar2026[i],y=2026;if(r[0]==12)y=2027;var rd=new Date(y,r[1]-1,r[2]).getTime();if(nt>=rd){var df=Math.floor((nt-rd)/86400000);b={m:r[0],d:df+1}}}return b}
+function rebuildSel(id,val){
+  var h='<select class="paipanSel">';
+  for(var i=0;i<dz.length;i++){h+='<option'+(dz[i]==val?' selected':'')+'>'+dz[i]+'</option>'}
+  h+='</select>';document.getElementById(id).innerHTML=h;
+}
+function calc(){
+  var y=parseInt(document.getElementById('iY').value),m=parseInt(document.getElementById('iM').value),d=parseInt(document.getElementById('iD').value);
+  if(!y||!m||!d){tm('请填完整');return}
+  var mv=(g=='m')?fw:bw,cur=yz(2026),n=yz(y),mo=mv(n,m),ri=mv(mo,d),age=2026-y+1,lu=gl(),h1=mv(ri,age),h2=mv(h1,lu.m),h3=mv(h2,lu.d);
+  document.getElementById('a1').textContent=n;document.getElementById('a2').textContent=mo;document.getElementById('a3').textContent=ri;
+  rebuildSel('cy',cur);rebuildSel('b1',h1);rebuildSel('b2',h2);rebuildSel('b3',h3);
+  
+  document.getElementById('res').className='on'}
+if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(e){console.log('SW注册失败',e)})})}
+</script></script>
+</body>
+</html>

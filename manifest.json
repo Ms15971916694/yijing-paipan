@@ -1,0 +1,23 @@
+{
+  "name": "易经排盘",
+  "short_name": "排盘",
+  "description": "输入出生信息，自动推算命局地支",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#0c0c1a",
+  "theme_color": "#0c0c1a",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
